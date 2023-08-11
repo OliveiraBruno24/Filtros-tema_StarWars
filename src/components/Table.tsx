@@ -3,6 +3,7 @@ import { PlanetsListContext } from '../Context/PlanetContext';
 import { PlanetType } from '../types';
 
 import './Table.css';
+import { any } from 'prop-types';
 
 function Table() {
   const { planetsInfo } = useContext(PlanetsListContext);
@@ -28,6 +29,7 @@ function Table() {
   const filterColums = () => {
     const filtered = planetsInfo.filter((planet) => {
       const planetValue = parseFloat(planet[selectedColumn]);
+      console.log('planetValue', planetValue);
       const filterValue = parseFloat(selectedValue);
 
       if (selectedOperator === 'maior que') {
