@@ -3,7 +3,6 @@ import { PlanetsListContext } from '../Context/PlanetContext';
 import { PlanetType } from '../types';
 
 import './Table.css';
-import { any } from 'prop-types';
 
 function Table() {
   const { planetsInfo } = useContext(PlanetsListContext);
@@ -27,7 +26,7 @@ function Table() {
   }, [planetsInfo]);
 
   const filterColums = () => {
-    const filtered = planetsInfo.filter((planet) => {
+    const filtered = planetsInfo.filter((planet:any) => {
       const planetValue = parseFloat(planet[selectedColumn]);
       console.log('planetValue', planetValue);
       const filterValue = parseFloat(selectedValue);
