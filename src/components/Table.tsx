@@ -2,10 +2,18 @@ import { useContext, useEffect, useState } from 'react';
 import { PlanetsListContext } from '../Context/PlanetContext';
 import { PlanetType } from '../types';
 
+import './Table.css';
+
 function Table() {
   const { planetsInfo } = useContext(PlanetsListContext);
+  const colunaArray = ['population',
+    'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
+  const operadorArray = ['maior que', 'menor que', 'igual a'];
 
   const [filteredPlanets, setFilteredPlanets] = useState<PlanetType[]>(planetsInfo);
+  const [selectedColumn, setSelectedColumn] = useState('population');
+  const [selectedOperator, setSelectedOperator] = useState('maior que');
+  const [selectedValue, setSelectedValue] = useState('0');
 
   function filterPlanets(value: string) {
     const filteredPlanetsInfo = planetsInfo.filter((planet) => planet
@@ -17,6 +25,25 @@ function Table() {
     setFilteredPlanets(planetsInfo);
   }, [planetsInfo]);
 
+  const filterColums = () => {
+    const filtered = planetsInfo.filter((planet) => {
+      const planetValue = parseFloat(planet[selectedColumn]);
+      const filterValue = parseFloat(selectedValue);
+
+      if (selectedOperator === 'maior que') {
+        return planetValue > filterValue;
+      } if (selectedOperator === 'menor que') {
+        return planetValue < filterValue;
+      }
+      return planetValue === filterValue;
+    });
+    setFilteredPlanets(filtered);
+  };
+
+  const resetButton = () => {
+    setFilteredPlanets(planetsInfo);
+  };
+
   return (
     <div>
       <input
@@ -24,6 +51,50 @@ function Table() {
         type="text"
         onChange={ (e) => filterPlanets(e.target.value) }
       />
+      <label htmlFor="column-filter">Coluna</label>
+      <select
+        id="column-filter"
+        data-testid="column-filter"
+        onChange={ (e) => setSelectedColumn(e.target.value) }
+      >
+        { ...colunaArray.map((coluna, index) => (
+          <option key={ index } value={ coluna }>
+            {coluna}
+          </option>
+        )) }
+      </select>
+      <label htmlFor="comparison-filter">Operador</label>
+      <select
+        data-testid="comparison-filter"
+        id="column-filter"
+        onChange={ (e) => setSelectedOperator(e.target.value) }
+      >
+        { ...operadorArray.map((operador, index) => (
+          <option key={ index } value={ operador }>
+            {operador}
+          </option>
+        )) }
+      </select>
+      <input
+        data-testid="value-filter"
+        type="number"
+        value={ selectedValue }
+        onChange={ (e) => setSelectedValue(e.target.value) }
+      />
+      <button
+        data-testid="button-filter"
+        type="button"
+        onClick={ filterColums }
+      >
+        Filtrar
+
+      </button>
+      <button
+        type="button"
+        onClick={ resetButton }
+      >
+        Limpar Filtros
+      </button>
       <table>
         <thead>
           <tr>
@@ -67,4 +138,5 @@ function Table() {
     </div>
   );
 }
+
 export default Table;
