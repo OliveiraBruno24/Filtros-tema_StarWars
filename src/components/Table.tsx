@@ -26,9 +26,8 @@ function Table() {
   }, [planetsInfo]);
 
   const filterColums = () => {
-    const filtered = planetsInfo.filter((planet:any) => {
+    const filtered = filteredPlanets.filter((planet:any) => { // como eu deveria tipar aqui
       const planetValue = parseFloat(planet[selectedColumn]);
-      console.log('planetValue', planetValue);
       const filterValue = parseFloat(selectedValue);
 
       if (selectedOperator === 'maior que') {
