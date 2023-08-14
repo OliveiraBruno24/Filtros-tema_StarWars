@@ -66,7 +66,7 @@ function Table() {
       <label htmlFor="comparison-filter">Operador</label>
       <select
         data-testid="comparison-filter"
-        id="column-filter"
+        id="comparison-filter"
         onChange={ (e) => setSelectedOperator(e.target.value) }
       >
         { ...operadorArray.map((operador, index) => (
