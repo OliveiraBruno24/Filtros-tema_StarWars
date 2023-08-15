@@ -15,6 +15,8 @@ function Table() {
   const [selectedOperator, setSelectedOperator] = useState('maior que');
   const [selectedValue, setSelectedValue] = useState('0');
 
+  const [filteredColumns, setFilteredColumns] = useState<string[]>([]);
+
   function filterPlanets(value: string) {
     const filteredPlanetsInfo = planetsInfo.filter((planet) => planet
       .name.toLowerCase().includes(value.toLowerCase()));
@@ -37,12 +39,28 @@ function Table() {
       }
       return planetValue === filterValue;
     });
+
     setFilteredPlanets(filtered);
+
+    if (!filteredColumns.includes(selectedColumn)) {
+      setFilteredColumns([...filteredColumns, selectedColumn]);
+    }
   };
 
   const resetButton = () => {
     setFilteredPlanets(planetsInfo);
+    setFilteredColumns([]);
+    setSelectedColumn('population');
+    setSelectedOperator('maior que');
+    setSelectedValue('0');
   };
+
+  useEffect(() => {
+    setSelectedColumn(
+      (colunaArray
+        .find((coluna) => !filteredColumns.includes(coluna))) ?? '',
+    );
+  }, [filteredColumns]);
 
   return (
     <div>
@@ -56,12 +74,19 @@ function Table() {
         id="column-filter"
         data-testid="column-filter"
         onChange={ (e) => setSelectedColumn(e.target.value) }
+        value={ selectedColumn }
       >
-        { ...colunaArray.map((coluna, index) => (
-          <option key={ index } value={ coluna }>
-            {coluna}
-          </option>
-        )) }
+        { colunaArray.length === 0 ? null : colunaArray
+          .filter((coluna) => !filteredColumns.includes(coluna)) // retorna true se a coluna não estiver no array
+          .map((coluna, index) => ( // retorna um novo array com as colunas que não estão no array
+            <option
+              key={ index }
+              value={ coluna }
+
+            >
+              {coluna}
+            </option>
+          )) }
       </select>
       <label htmlFor="comparison-filter">Operador</label>
       <select
