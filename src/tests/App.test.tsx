@@ -1,9 +1,19 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
+import mockFetch from '../../cypress/mocks/fetch.js';
+import testData from '../../cypress/mocks/testData.js';
+
 
 describe('Teste da aplicação toda', () => {
+  beforeEach(() => {
+    global.fetch = () => Promise.resolve({
+      status: 200,
+      ok: true,
+      json: () => Promise.resolve(testData),
+    });;
+  });
+
   it('Teste se renderiza o componente <App />', () => {
     render(<App />);
     const linkElement = screen.getByText(/Que a força esteja com vc!/i);
