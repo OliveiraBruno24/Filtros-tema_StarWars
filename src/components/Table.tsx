@@ -11,6 +11,8 @@ function Table() {
   const operadorArray = ['maior que', 'menor que', 'igual a'];
 
   const [filteredPlanets, setFilteredPlanets] = useState<PlanetType[]>(planetsInfo);
+  console.log('trem', filteredPlanets);
+
   const [selectedColumn, setSelectedColumn] = useState('population');
   const [selectedOperator, setSelectedOperator] = useState('maior que');
   const [selectedValue, setSelectedValue] = useState('0');
